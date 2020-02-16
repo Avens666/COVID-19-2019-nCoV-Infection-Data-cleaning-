@@ -7,7 +7,7 @@
 import pandas
 
 inputfile = "data2.15.csv"
-outputfile = "outA1.csv"
+outputfile = "out1a.csv"
 
 # pandas显示配置 方便调试
 # 显示所有列
@@ -17,7 +17,12 @@ pandas.set_option('display.max_rows', None)
 # 设置value的显示长度为100，默认为50
 pandas.set_option('max_colwidth', 200)
 
-dataf = pandas.read_csv(inputfile, encoding='gb2312')
+# ！！！ 根据需要选择合适的字符集
+try:
+    dataf = pandas.read_csv(inputfile, encoding='UTF-8')
+except:
+    dataf = pandas.read_csv(inputfile, encoding='gb2312')
+
 
 dataf['updateTime'] = pandas.to_datetime(dataf['updateTime'])
 dataf['date'] = dataf['updateTime'].apply(lambda x: x.strftime('%Y-%m-%d'))
@@ -37,6 +42,7 @@ df_date = df_t.drop_duplicates()  # 去重 这个返回Series对象
 
 for date_t in df_date:
     for name in df_province:
+        print(date_t + name)  # 输出处理进度
         df1 = dataf.loc[(dataf['provinceName'].str.contains(name)) & (dataf['date'].str.contains(date_t)), :]
 
         df_t = df1['cityName']
@@ -48,10 +54,8 @@ for date_t in df_date:
         for city in df_city:
             df2 = df1.loc[(df1['cityName'].str.contains(city)), :]  #df2筛选出某个市的数据
 
-            print(df2)
 #使用当天最后时间的数据，注释这行，则使用当天最大值提取数据
             df2 = df2.loc[(df2['updateTime'] == df2['updateTime'].max()), :]
-            print(df2)
 
             new = pandas.DataFrame({'省': name,
                                     '省确诊': province_confirmedCount,
@@ -68,4 +72,5 @@ for date_t in df_date:
 
 # print(df)
 
-df.to_csv(outputfile, encoding="gb2312")
+df.to_csv(outputfile, encoding="utf_8_sig") #为保证excel打开兼容，输出为UTF8带签名格式
+
