@@ -32,7 +32,7 @@ data 目录存放了我直接清洗出的数据，方便大家使用，免得大
 
 excel文件，是对数据源使用了透视图并增加了一些图表分析的结果
 
-![ ]( https://pic1.zhimg.com/80/v2-2dbe34eddb2c6591546498062aec6c6b_hd.png )
+![ ]( https://github.com/Avens666/COVID-19-2019-nCoV-Infection-Data-cleaning-/blob/master/img/Image1.jpg )
 
 
 # 数据下载说明
