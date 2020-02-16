@@ -27,7 +27,12 @@ provinceName | provinceEnglishName | cityName | cityEnglishName | province_confi
 
 # Data说明
 data 目录存放了我直接清洗出的数据，方便大家使用，免得大家再配Python环境，去下载数据运行脚本。 源数据不翻墙好像还不能直接下载
+
 里面csv是直接使用脚本导出的数据，后续每天争取更新
+
 excel文件，是对数据源使用了透视图并增加了一些图表分析的结果
+
+![ ]( https://pic1.zhimg.com/80/v2-2dbe34eddb2c6591546498062aec6c6b_hd.png )
+
 
 2020.2.16 cz
