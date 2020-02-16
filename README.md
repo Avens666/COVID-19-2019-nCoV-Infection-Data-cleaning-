@@ -2,9 +2,9 @@
 针对新冠病毒疫情数据的清洗脚本和清洗后的数据，
 
 # 源数据说明
-源数据使用 https://github.com/jianxu305 的 https://github.com/jianxu305/DXY-2019-nCoV-Data/blob/master/csv/DXYArea.csv
+源数据使用 https://github.com/BlankerL 的 https://github.com/BlankerL/DXY-COVID-19-Data/blob/master/csv/DXYArea.csv
 其定时从丁香园网站抓取的原始各地区上报数据
-感谢 jianxu305 的工作
+感谢 BlankerL 的工作
 
 原始数据格式如下
 
