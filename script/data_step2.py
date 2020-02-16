@@ -1,6 +1,6 @@
 # 本脚本是针对中国新冠病毒各省市历史发病数据的清洗工具
 # 作者 https://github.com/Avens666  mail: cz_666@qq.com
-# 数据源使用 https://raw.githubusercontent.com/BlankerL/DXY-COVID-19-Data/master/csv/DXYArea.csv
+# 数据源使用 https://github.com/BlankerL/DXY-COVID-19-Data/blob/master/csv/DXYArea.csv
 # 输入源数据来自 data_step1.py 的输出文件
 # 本脚本基于data_step1.py的输出 计算每天的新增数据，源数据只有每天的累计确诊数据，本脚本通过当天数据减去前一天数据的方式，计算出每天新增数据
 # 用户通过修改 inputfile  和  outputfile 定义源数据文件和输出文件
