@@ -35,4 +35,9 @@ excel文件，是对数据源使用了透视图并增加了一些图表分析的
 ![ ]( https://pic1.zhimg.com/80/v2-2dbe34eddb2c6591546498062aec6c6b_hd.png )
 
 
+# 数据下载说明
+由于raw.githubusercontent.com 被DNS污染，部分地区不能下载， 如果你的github的文件下载有问题，试试hosts文件加入如下内容
+
+`199.232.28.133 raw.githubusercontent.com`
+
 2020.2.16 cz
