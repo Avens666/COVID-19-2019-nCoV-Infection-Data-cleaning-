@@ -10,7 +10,7 @@ from datetime import timedelta
 import pandas
 
 inputfile = "out1.csv"
-outputfile = "out_2_16.csv"
+outputfile = "out_2_18.csv"
 # 显示所有列
 pandas.set_option('display.max_columns', None)
 # 显示所有行
@@ -31,27 +31,58 @@ dataf['日期'] = pandas.to_datetime(dataf['日期'], format='%Y-%m-%d')  # 1900
 df_t = dataf['日期']
 df_date = df_t.drop_duplicates()  # 去重 这个返回Series对象
 
-#dataf['新增确诊'] = dataf['确诊']
+# dataf['新增确诊'] = dataf['确诊']
 dataf.insert(loc=6, column='新增确诊', value=0)
 dataf.insert(loc=7, column='新增治愈', value=0)
 dataf.insert(loc=8, column='新增死亡', value=0)
 
 # df_date = df_date.sort_values(ascending=False)
-cur_date = df_date.min()
+min_date = df_date.min()
+cur_date = df_date.max()
+
+df_t = pandas.DataFrame()
 
 for index, data in dataf.iterrows():
-    if data['日期'] != cur_date:
+    # if data['日期'] != min_date:
         data2 = dataf.loc[
                 (dataf['省'] == data['省']) & (dataf['市'] == data['市']) & (dataf['日期'] == data['日期'] - timedelta(days=1)),
                 :]
+        # 判断后一天是否存在
+        data3 = dataf.loc[
+                (dataf['省'] == data['省']) & (dataf['市'] == data['市']) & (dataf['日期'] == data['日期'] + timedelta(days=1)),
+                :]
+
         if data2.shape[0] > 0:
             dataf.loc[index, '新增确诊'] = data['确诊'] - data2.iloc[0, :]['确诊']
             dataf.loc[index, '新增治愈'] = data['治愈'] - data2.iloc[0, :]['治愈']
             dataf.loc[index, '新增死亡'] = data['死亡'] - data2.iloc[0, :]['死亡']
-    else:
-        dataf.loc[index, '新增确诊'] = data['确诊']
-        dataf.loc[index, '新增治愈'] = data['治愈']
-        dataf.loc[index, '新增死亡'] = data['死亡']
-    print( data['日期']) # 输出处理进度
+        else:
+            dataf.loc[index, '新增确诊'] = data['确诊']
+            dataf.loc[index, '新增治愈'] = data['治愈']
+            dataf.loc[index, '新增死亡'] = data['死亡']
 
-dataf.to_csv(outputfile, encoding="utf_8_sig") #为保证excel打开兼容，输出为UTF8带签名格式
+        if (data['日期'] != cur_date) & (data3.shape[0] == 0):  # 后一天如果没有数据，加一条冲抵数据
+            new = pandas.DataFrame({'省': data['省'],
+                                    '省确诊': data['省确诊'],
+                                    '省治愈': data['省治愈'],
+                                    '省死亡': data['省死亡'],
+                                    '市': data['市'],
+                                    '新增确诊': 0 - data['确诊'],
+                                    '新增治愈': 0 - data['治愈'],
+                                    '新增死亡': 0 - data['死亡'],
+                                    '确诊': 0,
+                                    '治愈': 0,
+                                    '死亡': 0,
+                                    '日期': data['日期'] + timedelta(days=1)},
+                                   pandas.Index(range(1)))
+            #            print(new.head())
+            df_t = df_t.append(new)
+    # else:
+    #     dataf.loc[index, '新增确诊'] = data['确诊']
+    #     dataf.loc[index, '新增治愈'] = data['治愈']
+    #     dataf.loc[index, '新增死亡'] = data['死亡']
+#    print(data['日期'])  # 输出处理进度
+
+out = dataf.append(df_t, sort=False)
+
+out.to_csv(outputfile, encoding="utf_8_sig")  # 为保证excel打开兼容，输出为UTF8带签名格式
