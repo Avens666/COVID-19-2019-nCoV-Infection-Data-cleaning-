@@ -8,7 +8,7 @@
 import pandas
 from datetime import timedelta
 
-input_file = "data2.18.csv"  # "t15.csv"
+input_file = "data2.23.csv"
 output_file = "out1.csv"
 
 # pandas显示配置 方便调试
@@ -36,7 +36,7 @@ df_province = df_t.drop_duplicates()  # 去重 这个返回Series对象
 # df_province = df_t.unique()  # 去重 这个返回 ndarray
 
 
-df = pandas.DataFrame()
+df = pandas.DataFrame(index=None)
 
 df_t = dataf['date']
 df_date = df_t.drop_duplicates()  # 去重 返回Series对象
@@ -95,4 +95,4 @@ for date_t in df_date:
 
 # print(df)
 
-df.to_csv(output_file, encoding="utf_8_sig")  # 为保证excel打开兼容，输出为UTF8带签名格式
+df.to_csv(output_file, encoding="utf_8_sig", index=False)  # 为保证excel打开兼容，输出为UTF8带签名格式
