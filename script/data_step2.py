@@ -91,6 +91,9 @@ for index, data in dataf.iterrows():
 print('处理数据完毕 条数: ' + str(step))
 out = dataf.append(df_t, sort=False)
 
+# 日期矫正为前一天，因为当天是发布日期，数据是反映前一天日期
+out['日期'] = out['日期'] - timedelta(days=1)
+
 print('输出csv文件 : ' + output_file)
 out.to_csv(output_file, encoding="utf_8_sig", index=False)  # 为保证excel打开兼容，输出为UTF8带签名格式
 
