@@ -7,9 +7,13 @@
 
 import pandas
 from datetime import timedelta
+from datetime import datetime
 
-input_file = "data2.23.csv"
+input_file = "data3.13.csv"  # "t15.csv"
 output_file = "out1.csv"
+
+# 从这一天开始处理，避免从头处理，提升速度
+date_start = datetime(2020, 1, 24, 0, 0)
 
 # pandas显示配置 方便调试
 # 显示所有列
@@ -26,6 +30,16 @@ except:
     dataf = pandas.read_csv(input_file, encoding='gb2312')
 
 dataf['updateTime'] = pandas.to_datetime(dataf['updateTime'])
+
+# 过滤指定时间之前的数据
+# dataf = dataf.loc[(dataf['updateTime'] >= date_start), :]
+
+# 处理一个数据在前一天采集的问题
+# for index, data in dataf.iterrows():
+#    if "甘肃省" in data['provinceName']:
+#        dataf.loc[index, 'updateTime'] += timedelta(hours=3)
+dataf['updateTime'] = dataf['updateTime'] + timedelta(hours=3)
+
 dataf['date'] = dataf['updateTime'].apply(lambda x: x.strftime('%Y-%m-%d'))
 dataf['date'] = pandas.to_datetime(dataf['date'])
 # print(type(dataf))  print(dataf.dtypes)   print(dataf.head())
@@ -41,11 +55,15 @@ df = pandas.DataFrame(index=None)
 df_t = dataf['date']
 df_date = df_t.drop_duplicates()  # 去重 返回Series对象
 df_date = df_date.sort_values()
+
+NewList = []
+
 for date_t in df_date:
     for name in df_province:
         print(date_t.strftime('%Y-%m-%d') + name)  # 输出处理进度
         df1 = dataf.loc[(dataf['provinceName'].str.contains(name)) & (dataf['date'] == date_t), :]
 
+# 后面市会筛选，默认每次省的数据为全量数据，不全视为删除
         df1 = df1.loc[(df1['updateTime'] == df1['updateTime'].max()), :]  # 筛出省的最后数据 避免之前时间的市数据干扰，产生孤立值
 
         df_t = df1['cityName']
@@ -71,7 +89,9 @@ for date_t in df_date:
                                     '日期': date_t},
                                    pandas.Index(range(1)))
             #            print(new.head())
-            df = df.append(new)
+#            df = df.append(new)
+            NewList.append(new)
+df = df.append(NewList)
 
 # 补齐一个省的空数据
 
