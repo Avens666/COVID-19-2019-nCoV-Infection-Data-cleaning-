@@ -73,6 +73,8 @@ for date_t in df_date:
         province_deadCount = df1['province_deadCount'].max()
 
         for city in df_city:
+            if pandas.isnull(city):
+                continue            
             df2 = df1.loc[(df1['cityName'].str.contains(city)), :]  # df2筛选出某个市的数据
 
             # 使用当天最后时间的数据，注释这行，则使用当天最大值提取数据
